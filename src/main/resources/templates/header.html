@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+
+<head th:fragment="common_header(title)">
+    <!--suppress ThymeleafVariablesResolveInspection -->
+    <title th:text="${title}">Place title here</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="/static/css/bootstrap.css" th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+    <style>
+        body {
+            padding-top: 80px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
+
+</head>
+<body>
+<div th:fragment="navbar" id="nav-bar" class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="/">myCalendar</a>
+            <div class="nav-collapse">
+                <ul class="nav">
+                    <li><a id="navWelcomeLink" href="/">Welcome</a></li>
+                    <li sec:authorize-url="/events/"><a id="navEventsLink" href="/events/">All Events</a></li>
+                    <li sec:authorize-url="/events/my"><a id="navMyEventsLink" href="/events/my">My Events</a></li>
+                    <li sec:authorize-url="/events/form"><a id="navCreateEventLink" href="/events/form">Create Event</a></li>
+                    <li>
+                        <!--suppress HtmlUnknownTarget -->
+                        <a id="navH2Link" href="/h2-console"  target="_blank">H2</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="nav-account" class="nav-collapse pull-right">
+                <ul class="nav">
+                    <th:block sec:authorize="isAuthenticated()">
+                        <li><p th:text="'Welcome ' + ${#authentication.principal.firstName}">Welcome ...</p></li>
+                        <li>
+                            <form th:action="@{/logout}" method="post" class="form-inline form-horizontal">
+                                <button id="submitLogout" name="submit" type="submit">
+                                    <i class="icon-off"></i>
+                                </button>
+                            </form>
+                        </li>
+                    </th:block>
+
+                    <th:block sec:authorize="!isAuthenticated()">
+                        <li>
+                            <!--suppress HtmlUnknownTarget -->
+                            <a id="loginUrl" href="/login/form">Login</a>
+                        </li>
+                        <li>
+                            <!--suppress HtmlUnknownTarget -->
+                            <a id="signupUrl" href="/signup/form">Signup</a>
+                        </li>
+                    </th:block>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:if="${message}" th:text="${message}" class="alert alert-success" id="message" th:fragment="messages">
+    Message Placeholder
+</div>
+
+<div class="container">
+    <div th:fragment="container(title)">
+        <!--    <c:if test="${message != null}">-->
+        <div class="alert alert-success" id="1message">Message Placeholder</div>
+        <!--    </c:if>-->
+        <!--suppress ThymeleafVariablesResolveInspection -->
+        <h1 id="title" th:replace="${title}">Page Title Here</h1>
+    </div>
+</div>
+
+</body>
+
+</html>
